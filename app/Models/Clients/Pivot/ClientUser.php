@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class ClientUser extends Model
 {
     use HasFactory;
+
+    public function client()      {   return $this->hasOne(ClientUser::class, 'user_id');     }
 }

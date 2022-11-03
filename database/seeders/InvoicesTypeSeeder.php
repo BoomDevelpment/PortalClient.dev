@@ -17,7 +17,7 @@ class InvoicesTypeSeeder extends Seeder
     {
         $status     =   Status::where('name', 'like', '%act%')->first()->id;
 
-        $data[0]   =  ["name"  =>  "pago automatico",    "status" => $status];
+        $data[0]   =  ["name"  =>  strtoupper("pago automatico"),    "status" => $status];
         
         foreach ($data as $d => $da) 
         {

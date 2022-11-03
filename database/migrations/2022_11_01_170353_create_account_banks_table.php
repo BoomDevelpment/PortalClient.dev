@@ -24,7 +24,7 @@ class CreateAccountBanksTable extends Migration
             $table->integer('type_id')->unsigned()->default(1);
             $table->integer('entity_id')->unsigned()->default(1);
             $table->integer('status_id')->unsigned()->default(1);
-            $table->integer('clients_id')->unsigned()->default(1);
+            $table->integer('client_id')->unsigned()->default(1);
             $table->timestamps();
 
             $table->foreign('bank_id')->references('id')->on('banks');
@@ -32,7 +32,7 @@ class CreateAccountBanksTable extends Migration
             $table->foreign('type_id')->references('id')->on('account_bank_types');
             $table->foreign('entity_id')->references('id')->on('account_bank_entities');
             $table->foreign('status_id')->references('id')->on('statuses');
-            $table->foreign('clients_id')->references('id')->on('clients');
+            $table->foreign('client_id')->references('id')->on('clients');
 
             $table->index(['name']);
             $table->index(['last']);

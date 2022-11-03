@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Clients\General\Status;
 use App\Models\Clients\Payments\Scrapers;
 use Illuminate\Database\Seeder;
+use Symfony\Component\HttpClient\HttpClient;
 
-use Goutte;
+use Goutte\Client;
 
 class ScrapersSeeder extends Seeder
 {
@@ -16,10 +18,12 @@ class ScrapersSeeder extends Seeder
      */
     public function run()
     {
-        $url        =   'https://www.bcv.org.ve/';
+        $url        =   'http://www.bcv.org.ve/';
 
-        dd($url);
-        $crawler    =   Goutte::request('GET', $url, CURLOPT_SSL_VERIFYPEER, false);
+
+        $client     =   new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+        $crawler    =   $client->request('GET', $url);
+
         $euro       =   $crawler->filter('#euro')->each(function ($node){ return    $node->text(); });
         $yuan       =   $crawler->filter('#yuan')->each(function ($node){ return    $node->text(); });
         $lira       =   $crawler->filter('#lira')->each(function ($node){ return    $node->text(); });
@@ -47,6 +51,8 @@ class ScrapersSeeder extends Seeder
             $new->save();
 
         } catch (\Exception $e) {
+
+            dd($e->getMessage());
             var_dump($e->getMessage());
         }
     }

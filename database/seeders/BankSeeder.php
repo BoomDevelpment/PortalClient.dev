@@ -56,7 +56,7 @@ class BankSeeder extends Seeder
         {
             $new    = New Bank();
             $new->code          =   $da['code'];
-            $new->name          =   $da['name'];
+            $new->name          =   strtoupper($da['name']);
             $new->rif           =   $da['rif'];
             $new->status_id     =   $da['status'];
             

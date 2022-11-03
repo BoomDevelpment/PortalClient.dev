@@ -19,7 +19,7 @@ class CreditCardEntitySeeder extends Seeder
         
         $data[0]   =   ['name'     =>  strtoupper('VISA'),              'status'   =>  $status, 'path' =>   'src/images/payment/visa.jpg'];
         $data[1]   =   ['name'     =>  strtoupper('MASTERCARD'),        'status'   =>  $status, 'path' =>   'src/images/payment/mastercard.jpg'];
-        $data[1]   =   ['name'     =>  strtoupper('AMERICAN EXPRESS'),  'status'   =>  $status, 'path' =>   'src/images/payment/amex.jpg'];
+        $data[2]   =   ['name'     =>  strtoupper('AMERICAN EXPRESS'),  'status'   =>  $status, 'path' =>   'src/images/payment/amex.jpg'];
         
         foreach ($data as $d => $da) 
         {

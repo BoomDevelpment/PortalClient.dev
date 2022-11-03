@@ -23,9 +23,9 @@ class ClientUserSeeder extends Seeder
         {
             foreach ($user as $u => $us) 
             {
+
                 if($cl->name == $us->name)
-                {
-                    
+                {                    
                     $new                =   new ClientUser();
                     $new->client_id     =   $cl->id;
                     $new->user_id       =   $us->id;

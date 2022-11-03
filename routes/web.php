@@ -19,3 +19,5 @@ Route::get('/', function () {
 });
 
 Route::get('/test',         [TestController::class, 'index']);
+Route::get('/models',       [TestController::class, 'Models']);
+Route::get('/scrapers',     [TestController::class, 'Scrapers']);

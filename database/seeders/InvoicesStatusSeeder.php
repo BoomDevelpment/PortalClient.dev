@@ -17,9 +17,9 @@ class InvoicesStatusSeeder extends Seeder
     {
         $status     =   Status::where('name', 'like', '%act%')->first()->id;
 
-        $data[0]   =  ["name"  =>  "pagado",    "status" => $status];
-        $data[1]   =  ["name"  =>  "no pagado", "status" => $status];
-        $data[2]   =  ["name"  =>  "cancelado", "status" => $status];
+        $data[0]   =  ["name"  =>  strtoupper("pagado"),    "status" => $status];
+        $data[1]   =  ["name"  =>  strtoupper("no pagado"), "status" => $status];
+        $data[2]   =  ["name"  =>  strtoupper("cancelado"), "status" => $status];
         
         foreach ($data as $d => $da) 
         {
