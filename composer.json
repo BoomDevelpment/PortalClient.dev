@@ -15,6 +15,7 @@
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "laravel/ui": "^3.4",
         "paragonie/random_compat": "^9.99",
         "symfony/polyfill-php74": "^1.26",
         "weidner/goutte": "^2.2"
