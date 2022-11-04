@@ -17,9 +17,9 @@ class DonativeImageSeeder extends Seeder
     {
         $status     =   Status::where('name', 'like', '%act%')->first()->id;
         
-        $data[0]    =   ['name'     =>  '01-2022.jpg', 'src' => '/src/images/donative/', 'status'   =>  $status];
-        $data[1]    =   ['name'     =>  '02-2022.jpg', 'src' => '/src/images/donative/', 'status'   =>  $status];
-        $data[2]    =   ['name'     =>  '03-2022.jpg', 'src' => '/src/images/donative/', 'status'   =>  $status];
+        $data[0]    =   ['name'     =>  '01-2022.png', 'src' => '/src/images/donative/', 'status'   =>  $status];
+        $data[1]    =   ['name'     =>  '02-2022.png', 'src' => '/src/images/donative/', 'status'   =>  $status];
+        $data[2]    =   ['name'     =>  '03-2022.png', 'src' => '/src/images/donative/', 'status'   =>  $status];
         
         foreach ($data as $d => $da) 
         {

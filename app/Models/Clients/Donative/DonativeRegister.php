@@ -26,9 +26,7 @@ class DonativeRegister extends Model
             return  ( $new->save() ) ? true : false;
 
         } catch (\Exception $e) {
-            dd($e->getMessage());
             return false;
         }
-
     }
 }

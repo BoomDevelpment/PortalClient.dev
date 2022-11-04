@@ -35,10 +35,15 @@ use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Str;
 
+use FrittenKeeZ\Vouchers\Facades\Vouchers;
+use FrittenKeeZ\Vouchers\Models\Voucher;
+
 use Symfony\Component\HttpClient\HttpClient;
 
 use Image;
 use Goutte\Client as gClient;
+use Carbon\Carbon;
+use Carbon\CarbonInterval;
 
 class TestController extends Controller
 {
@@ -218,6 +223,24 @@ class TestController extends Controller
         }
 
         dd("Scrapers TestController");
+    }
+
+    public static function Ticket(Request $request)
+    {
+        $amount     =   1.00;
+        $user       =   User::findOrFail(auth()->user()->id);
+
+        $voucher    =   Vouchers::withMask('***-***')
+            ->withOwner($user)
+            ->withMetadata([
+                'amount'    =>  $amount,
+                'title'     =>  'Premiamos tu fidelidad',
+                'message'   =>  'Por ser tan buen cliente, te obsequiamos un vale por el monto de $ '.$amount.''
+                ])
+            ->withStartDateIn(CarbonInterval::create('P0D'))
+            ->withExpireDateIn(CarbonInterval::create('P1W'))
+            ->create();
+        dd($voucher);
     }
     
 }
