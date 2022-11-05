@@ -82,8 +82,9 @@ function ViewTrans(id)
         }
 
         $.each(data.d, function( i, d ) {
+            date = new Date(d.created);
             if(d.status != 3){ status = '<label class="label label-success">COMPROBADO</label>'}else{ status = '<label class="label label-danger">PENDIENTE</label>'; }
-            $('#'+table+'').append('<tr><td>'+i+'</td><td>'+d.date_trans+'</td><td>'+d.reference+'</td><td>$ '+d.total+'</td><td>BS '+d.bs+'</td><td>'+status+'</td><td>'+d.created+'</td><td><a onClick="viewRegister('+d.id+', id);" class="btn btn-info btn-outline-info btn-mini">Ver</a></td></tr>'); 
+            $('#'+table+'').append('<tr><td>'+i+'</td><td>'+d.date_trans+'</td><td>'+d.reference+'</td><td>$ '+d.total+'</td><td>BS '+d.bs+'</td><td>'+status+'</td><td>'+date.toISOString().slice(0, 10)+'</td><td><a onClick="viewRegister('+d.id+', id);" class="btn btn-info btn-outline-info btn-mini">Ver</a></td></tr>'); 
         });
 
         

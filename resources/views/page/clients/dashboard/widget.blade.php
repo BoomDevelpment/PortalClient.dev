@@ -94,8 +94,7 @@
             </div>
         </div>
         <div class="card-footer">
-            {{-- <a href="{{ url('/wallet') }}" class="button"> --}}
-            <a href="#" class="button">
+            <a href="{{ url('/wallet') }}" class="button">
                 <div class="row align-items-center">
                     <div class="col-9">
                         <p class="text-white m-b-0">Ver mas</p>

@@ -21,7 +21,7 @@ class TransferencePaypal extends Model
             $new->subject       =   strtoupper(trim($data['subject']));
             $new->title         =   strtoupper(trim($data['title']));
             $new->date_trans    =   strtoupper(trim($data['date_trans']));
-            $new->reference     =   strtoupper(trim($data['reference']));
+            $new->reference     =   trim($data['reference']);
             $new->total         =   strtoupper(trim($data['total']));
             $new->bs            =   strtoupper(trim($data['bs']));
             $new->email         =   strtolower(trim($data['email']));
@@ -36,10 +36,21 @@ class TransferencePaypal extends Model
         }
     }
 
+    public static function GeTransferences($data)
+    {
+        try {
+            $iRes   =   TransferencePaypal::where('client_id', '=', $data)->get();
+            return  ($iRes <> false) ? $iRes : false;
+        } catch (\Exception $e) {
+            return false;
+        }
+
+    }
+
     public static function GetReference($data)
     {
         try {
-            $reference  =   TransferencePaypal::where('reference', '=', $data)->first();
+            $reference  =   TransferencePaypal::where('reference', '=', $data)->get();
             return ($reference != null) ? $reference : false;
         } catch (\Exception $e) {
             dd($e->getMessage());

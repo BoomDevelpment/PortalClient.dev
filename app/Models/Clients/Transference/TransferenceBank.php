@@ -23,7 +23,7 @@ class TransferenceBank extends Model
             $new->date_trans    =   strtoupper(trim($data['date_trans']));
             $new->dni           =   strtoupper(trim($data['dni']));
             $new->account       =   strtoupper(trim($data['account']));
-            $new->reference     =   strtoupper(trim($data['reference']));
+            $new->reference     =   trim($data['reference']);
             $new->total         =   $data['total'];
             $new->bs            =   $data['bs'];
             $new->description   =   strtoupper(trim($data['description']));
@@ -36,6 +36,17 @@ class TransferenceBank extends Model
         } catch (\Exception $e) {
             return false;
         }
+    }
+
+    public static function GeTransferences($data)
+    {
+        try {
+            $iRes   =   TransferenceBank::where('client_id', '=', $data)->get();
+            return  ($iRes <> false) ? $iRes : false;
+        } catch (\Exception $e) {
+            return false;
+        }
+
     }
 
     public static function GetReference($data)

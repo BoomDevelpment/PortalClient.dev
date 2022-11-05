@@ -22,7 +22,7 @@ class TransferenceZelle extends Model
             $new->subject       =   strtoupper(trim($data['subject']));
             $new->title         =   strtoupper(trim($data['title']));
             $new->date_trans    =   strtoupper(trim($data['date_trans']));
-            $new->reference     =   strtoupper(trim($data['reference']));
+            $new->reference     =   trim($data['reference']);
             $new->total         =   strtoupper(trim($data['total']));
             $new->bs            =   strtoupper(trim($data['bs']));
             $new->description   =   strtoupper(trim($data['description']));
@@ -36,13 +36,23 @@ class TransferenceZelle extends Model
         }
     }
 
+    public static function GeTransferences($data)
+    {
+        try {
+            $iRes   =   TransferenceZelle::where('client_id', '=', $data)->get();
+            return  ($iRes <> false) ? $iRes : false;
+        } catch (\Exception $e) {
+            return false;
+        }
+
+    }
+
     public static function GetReference($data)
     {
         try {
-            $iRes   =   TransferenceZelle::where('reference', 'LIKE', '%'.$data.'%')->first();
+            $iRes   =   TransferenceZelle::where('reference', 'LIKE', '%'.$data.'%')->get();
             return  ($iRes <> false) ? $iRes : false;
         } catch (\Exception $e) {
-            dd($e->getMessage());
             return false;
         }
 

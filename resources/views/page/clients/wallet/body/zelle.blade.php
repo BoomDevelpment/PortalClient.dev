@@ -28,7 +28,7 @@
                                 @else
                                     <td><label class="label label-danger">PENDIENTE</label></td>
                                 @endif
-                                <td>{{ $zl->created_at->format('j F, Y') }}</td>
+                                <td>{{ $zl->created_at->toDateString() }}</td>
                                 <td><a onClick="viewRegister({{ $zl->id }}, 1);" class="btn btn-info btn-outline-info btn-mini">Ver</a></td>
                             </tr>
                         @endforeach

@@ -4,9 +4,13 @@ use App\Http\Controllers\Admins\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Clients\ClientsController;
 use App\Http\Controllers\Clients\DonateController;
+use App\Http\Controllers\Clients\PagoMovilController;
+use App\Http\Controllers\Clients\PaypalController;
 use App\Http\Controllers\Clients\ProfileController;
 use App\Http\Controllers\Clients\TicketController;
+use App\Http\Controllers\Clients\TransferenceController;
 use App\Http\Controllers\Clients\WalletController;
+use App\Http\Controllers\Clients\ZelleController;
 use App\Http\Controllers\TestController;
 use App\Models\Clients\Profile\Client;
 use App\Models\Clients\Profile\Operator;
@@ -78,9 +82,56 @@ Route::group(['prefix'  =>  '/accountbank'], function()
 Route::group(['prefix'  =>  '/wallet'], function() 
 {
     Route::get('/',                         [WalletController::class,   'index'])->name('/');
-    // Route::get('/register',                 [WalletController::class,   'WaRegister'])->name('/register');
+    Route::get('/register',                 [WalletController::class,   'WaRegister'])->name('/register');
     Route::get('/view',                     [WalletController::class,   'View'])->name('/view'); 
     Route::get('/view/all',                 [WalletController::class,   'ViewAll'])->name('/view/all'); 
+});
+
+Route::group(['prefix'  =>  '/zelle'], function() 
+{
+    Route::post('/verificate',              [ZelleController::class,   'Verificate'])->name('/verificate'); 
+    Route::post('/register',                [ZelleController::class,   'Register'])->name('/register'); 
+    Route::post('/files',                   [ZelleController::class,   'Files'])->name('/files'); 
+    Route::post('/files/delete',            [ZelleController::class,   'Delete'])->name('/files/delete'); 
+});
+
+Route::group(['prefix'  =>  '/paypal'], function() 
+{
+    Route::post('/verificate',              [PaypalController::class,   'Verificate'])->name('/verificate'); 
+    Route::post('/register',                [PaypalController::class,   'Register'])->name('/register'); 
+    Route::post('/files',                   [PaypalController::class,   'Files'])->name('/files'); 
+    Route::post('/files/delete',            [PaypalController::class,   'Delete'])->name('/files/delete'); 
+
+    // Route::post('/confirms',                [PaypalController::class,   'ConfirmPaypal'])->name('/confirms'); 
+    
+    // Pay with PayPal Redirect
+    // Route::get('/pay/{solution}',            [PaypalController::class,   'pay'])->name('/pay');
+    // Route::get('/status/{solution}',         [PaypalController::class,   'status'])->name('/status');
+    
+    // Pay with Paypal Javascritp    
+    // Route::post('/calculate',               [PaypalController::class,   'Calculate'])->name('/calculate');
+    // Route::post('/order',                   [PaypalController::class,   'Order'])->name('/order');
+    // Route::get('/process',                  [PaypalController::class,   'Process'])->name('/process');
+    // Route::get('/cancel',                   [PaypalController::class,   'Cancel'])->name('/cancel'); 
+    // Route::post('/verificate',              [PaypalController::class,   'Verificate'])->name('/verificate');
+    // Route::post('/register',                [PaypalController::class,   'RegisterPaypal'])->name('/register'); 
+    
+});
+
+Route::group(['prefix'  =>  '/transference'], function() 
+{
+    Route::post('/register',                [TransferenceController::class,   'Register'])->name('/register'); 
+    Route::post('/files',                   [TransferenceController::class,   'Files'])->name('/files'); 
+    Route::post('/files/delete',            [TransferenceController::class,   'Delete'])->name('/files/delete'); 
+    Route::post('/confirms',                [TransferenceController::class,   'Confirm'])->name('/confirms'); 
+});
+
+Route::group(['prefix'  =>  '/movil'], function() 
+{
+    Route::post('/register',                [PagoMovilController::class,   'Register'])->name('/register'); 
+    Route::post('/files',                   [PagoMovilController::class,   'Files'])->name('/files'); 
+    Route::post('/files/delete',            [PagoMovilController::class,   'Delete'])->name('/files/delete'); 
+    Route::post('/confirms',                [PagoMovilController::class,   'Confirm'])->name('/confirms'); 
 });
 
 Route::group(['prefix'  =>  '/tickets'], function() 

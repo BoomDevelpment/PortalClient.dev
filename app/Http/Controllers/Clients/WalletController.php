@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Clients;
 
 use App\Http\Controllers\Controller;
+use App\Models\Clients\General\Bank;
 use App\Models\Clients\Payments\Scrapers;
 use App\Models\Clients\Profile\Client;
 use App\Models\Clients\Transference\TransferenceBank;
@@ -148,7 +149,7 @@ class WalletController extends Controller
                     'total'         =>  $da['total'],
                     'bs'            =>  $da['bs'],
                     'status'        =>  $da['status_id'],
-                    'created'       =>  date_format($da['created_at'], "Y-m-d"),
+                    'created'       =>  $da['created_at']
                 ];
             }
 
@@ -158,5 +159,13 @@ class WalletController extends Controller
             'success'   =>    true,
             'd'         =>    $iData,
         ], Response::HTTP_OK);
+    }
+
+    public function WaRegister(Request $request)
+    {
+        return view('page/clients/wallet/register/index', [
+            'bank'      =>  Bank::get(),
+            'divisa'    =>  Scrapers::getLast()
+        ]);
     }
 }

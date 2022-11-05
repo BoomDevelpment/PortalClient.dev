@@ -24,7 +24,7 @@ class TransferenceMovil extends Model
             $new->date_trans    =   strtoupper(trim($data['date_trans']));
             $new->dni           =   strtoupper(trim($data['dni']));
             $new->phone         =   strtoupper(trim($data['phone']));
-            $new->reference     =   strtoupper(trim($data['reference']));
+            $new->reference     =   trim($data['reference']);
             $new->total         =   $data['total'];
             $new->bs            =   $data['bs'];
             $new->description   =   strtoupper(trim($data['description']));
@@ -37,6 +37,17 @@ class TransferenceMovil extends Model
         } catch (\Exception $e) {
             return false;
         }
+    }
+
+    public static function GeTransferences($data)
+    {
+        try {
+            $iRes   =   TransferenceMovil::where('client_id', '=', $data)->get();
+            return  ($iRes <> false) ? $iRes : false;
+        } catch (\Exception $e) {
+            return false;
+        }
+
     }
 
     public static function GetReference($data)
