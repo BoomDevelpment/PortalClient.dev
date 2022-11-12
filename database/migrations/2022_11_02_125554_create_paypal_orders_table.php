@@ -24,13 +24,13 @@ class CreatePaypalOrdersTable extends Migration
             $table->double('tax',12,2)->default('0.00');
             $table->double('total',12,2)->default('0.00');
             $table->string('link');
-            $table->string('status');
-            $table->string('paypal_client');
-            $table->string('paypal_email');
-            $table->double('gross_amount',12,2)->default('0.00');
-            $table->double('paypal_fee',12,2)->default('0.00');
-            $table->double('net_amount',12,2)->default('0.00');
-            $table->string('transaction_id');
+            $table->string('status')->nullable();
+            $table->string('paypal_client')->nullable();
+            $table->string('paypal_email')->nullable();
+            $table->double('gross_amount',12,2)->default('0.00')->nullable();
+            $table->double('paypal_fee',12,2)->default('0.00')->nullable();
+            $table->double('net_amount',12,2)->default('0.00')->nullable();
+            $table->string('transaction_id')->nullable();
             $table->timestamps();
 
             $table->foreign('client_id')->references('id')->on('clients');

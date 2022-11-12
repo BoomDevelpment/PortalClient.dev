@@ -10,6 +10,20 @@
                                 <div class="card">
                                     <div class="card-block">
                                         <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="card-block">
+                                                    <div class="owl-carousel carousel-nav owl-theme">
+                                                        @foreach ($pho as $ph)
+                                                            <div>
+                                                                <img class="d-block img-fluid" src="{{ asset($ph['src'].$ph['name']) }}" style="width: 100%">
+                                                            </div>
+                                                        @endforeach
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="col-lg-6 offset-lg-3">
                                                 <p class="txt-highlight text-center m-t-20">Para cambiar tu tickets, utiliza la siguiente accion
                                                 </p>

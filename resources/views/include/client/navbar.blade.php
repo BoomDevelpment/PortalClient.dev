@@ -41,9 +41,10 @@
                         <ul class="show-notification profile-notification dropdown-menu" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
                             <li><a href="{{ url('/dashboard') }}"><i class="feather icon-home"></i> Inicio</a></li>
                             <li><a href="{{ url('/profile') }}"><i class="feather icon-user"></i> Perfil</a></li>
-                            {{-- <li><a href="{{ url('/invoices') }}"><i class="ti-clipboard"></i> Facturas</a></li> --}}
+                            <li><a href="{{ url('/invoices') }}"><i class="ti-clipboard"></i> Facturas</a></li>
+                            <li><a href="{{ url('/wallet/register') }}"><i class="fa fa-newspaper-o"></i> Registro</a></li>
                             <li><a href="{{ url('/wallet') }}"><i class="ti-wallet"></i> Billetera</a></li>
-                            {{--<li><a href="{{ url('/wallet/register') }}"><i class="ti-wallet"></i> Registro</a></li> --}}
+                            <li><a href="{{ url('/customers') }}"><i class="ti-email"></i> Servicio Cliente</a></li>
                             <li><a href="{{ url('/tickets') }}"><i class="feather icon-file-text"></i> Ticket</a></li>
                             <li><a href="{{ url('/donate') }}"><i class="feather icon-heart"></i> Donativos</a></li>
                             <li><a href="{{ route('logout') }}"><i class="feather icon-log-out"></i> Logout</a></li>

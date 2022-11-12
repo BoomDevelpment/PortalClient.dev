@@ -26,8 +26,6 @@ class DonateController extends Controller
 
         $iPhotos    =   DonativeImage::where('status_id', '=', Status::where('name', 'like', '%act%')->first()->id)->orderBy('id', 'ASC')->get();
 
-        // dd($iPhotos);
-
         return view('page/clients/donatives/index',[
             'pho'   =>  $iPhotos
         ]);

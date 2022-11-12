@@ -39,7 +39,7 @@ class CreditCard extends Model
         $new->type_id       =   strtoupper($data['type_id']);
         $new->entity_id     =   strtoupper($data['entity_id']);
         $new->status_id     =   strtoupper($data['status_id']);
-        $new->client_id    =   strtoupper($data['client_id']);
+        $new->client_id     =   strtoupper($data['client_id']);
         
         try {
             

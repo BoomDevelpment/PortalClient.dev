@@ -2,6 +2,7 @@
 
 namespace App\Models\Clients\Profile;
 
+use App\Models\Clients\CustomerServices\CustomerServices;
 use App\Models\Clients\General\Gender;
 use App\Models\Clients\General\Status;
 use App\Models\Clients\Payments\CreditCard;
@@ -18,6 +19,8 @@ class Client extends Model
     public function gender()    {   return $this->belongsTo(Gender::class);             }    
     public function clientab()  {   return $this->hasOne(AccountBank::class);           }
     public function clientcc()  {   return $this->hasOne(CreditCard::class);            }
+
+    public function customers() {   return $this->hasMany(CustomerServices::class);     }
 
     public static function GetClient($data)
     {

@@ -12,8 +12,7 @@
             </div>
         </div>
         <div class="card-footer">
-            {{-- <a href="{{ url('/invoices') }}" class="button"> --}}
-            <a href="#" class="button">
+            <a href="{{ url('/invoices') }}" class="button">
                 <div class="row align-items-center">
                     <div class="col-9">
                         <p class="text-white m-b-0">Ver mas</p>
@@ -32,7 +31,7 @@
             <div class="row align-items-end">
                 <div class="col-8">
                     <h4 class="text-white">3</h4>
-                    <h6 class="text-white m-b-0">Notificaciones</h6>
+                    <h6 class="text-white m-b-0">Servicio al Cliente</h6>
                 </div>
                 <div class="col-4 text-right">
                     <i class="ti-email f-50"></i>
@@ -40,7 +39,7 @@
             </div>
         </div>
         <div class="card-footer">
-            <a href="https://google2.com" class="button">
+            <a href="{{ url('/customers') }}" class="button">
                 <div class="row align-items-center">
                     <div class="col-9">
                         <p class="text-white m-b-0">Ver mas</p>

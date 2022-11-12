@@ -3,7 +3,9 @@
 use App\Http\Controllers\Admins\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Clients\ClientsController;
+use App\Http\Controllers\Clients\CustomersController;
 use App\Http\Controllers\Clients\DonateController;
+use App\Http\Controllers\Clients\InvoicesController;
 use App\Http\Controllers\Clients\PagoMovilController;
 use App\Http\Controllers\Clients\PaypalController;
 use App\Http\Controllers\Clients\ProfileController;
@@ -101,20 +103,12 @@ Route::group(['prefix'  =>  '/paypal'], function()
     Route::post('/register',                [PaypalController::class,   'Register'])->name('/register'); 
     Route::post('/files',                   [PaypalController::class,   'Files'])->name('/files'); 
     Route::post('/files/delete',            [PaypalController::class,   'Delete'])->name('/files/delete'); 
-
-    // Route::post('/confirms',                [PaypalController::class,   'ConfirmPaypal'])->name('/confirms'); 
-    
-    // Pay with PayPal Redirect
-    // Route::get('/pay/{solution}',            [PaypalController::class,   'pay'])->name('/pay');
-    // Route::get('/status/{solution}',         [PaypalController::class,   'status'])->name('/status');
     
     // Pay with Paypal Javascritp    
-    // Route::post('/calculate',               [PaypalController::class,   'Calculate'])->name('/calculate');
-    // Route::post('/order',                   [PaypalController::class,   'Order'])->name('/order');
-    // Route::get('/process',                  [PaypalController::class,   'Process'])->name('/process');
-    // Route::get('/cancel',                   [PaypalController::class,   'Cancel'])->name('/cancel'); 
-    // Route::post('/verificate',              [PaypalController::class,   'Verificate'])->name('/verificate');
-    // Route::post('/register',                [PaypalController::class,   'RegisterPaypal'])->name('/register'); 
+    Route::post('/calculate',               [PaypalController::class,   'Calculate'])->name('/calculate');
+    Route::post('/order',                   [PaypalController::class,   'Order'])->name('/order');
+    Route::get('/process',                  [PaypalController::class,   'Process'])->name('/process');
+    Route::get('/cancel',                   [PaypalController::class,   'Cancel'])->name('/cancel'); 
     
 });
 
@@ -134,6 +128,11 @@ Route::group(['prefix'  =>  '/movil'], function()
     Route::post('/confirms',                [PagoMovilController::class,   'Confirm'])->name('/confirms'); 
 });
 
+Route::group(['prefix'  =>  '/invoices'], function() 
+{
+    Route::get('/',                         [InvoicesController::class,   'index'])->name('/');
+});
+
 Route::group(['prefix'  =>  '/tickets'], function() 
 {
     Route::get('/',                 [TicketController::class,   'index'])->name('/');
@@ -146,6 +145,13 @@ Route::group(['prefix'  =>  '/donate'], function()
     Route::get('/',                 [DonateController::class,   'index'])->name('/');
     Route::post('/register',        [DonateController::class,   'Register'])->name('/register');
 
+});
+
+Route::group(['prefix'  =>  '/customers'], function() 
+{
+    Route::get('/',                         [CustomersController::class,   'index'])->name('/'); 
+    Route::post('/info',                    [CustomersController::class,   'Info'])->name('/info'); 
+    Route::post('/register',                [CustomersController::class,   'Register'])->name('/register'); 
 });
 
 /**

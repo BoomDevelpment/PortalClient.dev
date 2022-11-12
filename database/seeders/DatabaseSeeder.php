@@ -2,6 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Clients\CustomerServices\CustomerFiel;
+use App\Models\Clients\CustomerServices\CustomerImagen;
+use App\Models\Clients\CustomerServices\CustomerRequest;
+use App\Models\Clients\CustomerServices\CustomerRequestType;
 use App\Models\Clients\Pivot\ClientUser;
 use App\Models\Clients\Pivot\OperatorUser;
 use Illuminate\Database\Seeder;
@@ -55,11 +59,21 @@ class DatabaseSeeder extends Seeder
         
         $this->call(PaypalSeeder::class);
         
-        $this->call(VoucherSeeder::class);        
+        $this->call(VoucherSeeder::class);   
+        $this->call(VoucherImageSeeder::class);      
         
         $this->call(DonativeImageSeeder::class);
         $this->call(DonativeVideoSeeder::class);
-        $this->call(DonativeRegisterSeeder::class);        
+        $this->call(DonativeRegisterSeeder::class);   
+
+        $this->call(TestOrderSeeder::class); 
+        
+        $this->call(CustomerStatusSeeder::class); 
+        $this->call(CustomerRequestTypeSeeder::class); 
+        $this->call(CustomerFielSeeder::class); 
+        $this->call(CustomerRequestSeeder::class); 
+        $this->call(CustomerTypeSeeder::class); 
+        $this->call(CustomerImagenSeeder::class); 
 
     }
 }

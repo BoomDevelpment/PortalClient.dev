@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Clients\General\Status;
 use App\Models\Clients\Payments\Scrapers;
 use App\Models\Clients\Paypal\Paypal;
+use App\Models\Clients\Paypal\PaypalOrder;
 use App\Models\Clients\Transference\TransferenceFile;
 use App\Models\Clients\Transference\TransferenceMethod;
 use App\Models\Clients\Transference\TransferencePaypal;
 use App\Models\Clients\Transference\TransferencePending;
 use App\Models\Clients\Transference\TransferenceStatus;
 use App\Models\Clients\Transference\TransferenceType;
+use App\Models\TestOrder;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -270,6 +272,255 @@ class PaypalController extends Controller
         }
     }
 
+    public function Calculate(Request $request)
+    {
+        try {
+            $por        =   5.4;
+            $com        =   0.3;
+
+            if($request->ty == 'i')
+            {
+                $order      =   TestOrder::findOrFail($request->id);
+                $amount     =   $order->amount;
+            }
+            elseif($request->ty == 'c')
+            {
+                $amount     =   $request->id;   
+            }
+            $res    =   $this->CalculatorPaypal($amount, 1);
+
+            $iData      =   [
+                'tInv'  =>  ROUND($res['tInv'],2),
+                'tCom'  =>  ROUND($res['tCom'],2),
+                'tAmo'  =>  ROUND($res['tAmo'],2)
+            ];
+
+            return response()->json([
+                'success'   =>  true,
+                'd'         =>  $iData
+            ], Response::HTTP_OK);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'success'   =>  false,
+                'message'   =>  'Invoice not found.'
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+    }
+
+    public function Order(Request $request)
+    {
+        $identified     =   random_int(10000000, 99999999);
+        try {
+            $por        =   5.4;
+            $com        =   0.3;
+           
+            $order      =   TestOrder::findOrFail($request->id);
+
+            $tAmo       =   (100 * ($com + $order->amount)) / ((0-$por) + 100);
+            $tCom       =   ($tAmo - $order->amount);
+
+            $iData  =   [
+                'identified'    =>  $identified,
+                'invoice_id'    =>  $request->id,
+                'http'          =>  $_SERVER['REQUEST_SCHEME'],
+                'host'          =>  $request->getHttpHost(),
+                'amount'        =>  ROUND($tAmo,2),
+                'comi'          =>  ROUND($tCom,2),
+                'invo'          =>  ROUND($order->amount,2)
+            ];
+
+            $cOrder     =   $this->CreateOrder($iData);
+           
+            return response()->json([
+                'success'   =>  true,
+                'd'         =>  $cOrder
+            ], Response::HTTP_OK);
+
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            return response()->json([
+                'success'   =>  false,
+                'message'   =>  'Invoice not found.'
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+
+        return response()->json([
+            'success' => true,
+        ], Response::HTTP_OK);
+    }
+
+    public function Process(Request $request)
+    {
+        $iResult    =   false;
+
+        try {
+    
+            $response = $this->client->request('POST', '/v2/checkout/orders/'.$request->token.'/capture', [
+                'headers'   =>  $this->getHeaders(),
+                ],
+            );
+
+            $result     =   json_decode($response->getBody(), true);
+
+            if($result['status']  ==  'COMPLETED')
+            {
+                $responseOrder   =   $this->client->request('GET', '/v2/checkout/orders/'.$result['id'].'', [
+                    'headers'   =>  $this->getHeaders(),
+                    ],
+                );
+
+                $resOrder   =   json_decode($responseOrder->getBody(), true);
+
+                $getInfo    =   PaypalOrder::DataGet($result['id']);
+
+                $identified =   ($getInfo <> false) ? $getInfo->identified : random_int(10000000, 99999999);
+
+                $iResult    =   [
+                    'identified'    =>  $identified,
+                    'client_id'     =>  auth()->user()->client->client_id,
+                    'invoice_id'    =>  $getInfo->invoice_id,
+                    'orderID'       =>  $result['id'],
+                    'currency'      =>  $result['purchase_units'][0]['payments']['captures'][0]['amount']['currency_code'],
+                    'amount'        =>  $result['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown']['gross_amount']['value'],
+                    'tax'           =>  $result['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown']['paypal_fee']['value'],
+                    'total'         =>  $result['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown']['net_amount']['value'],
+                    'link'          =>  '',
+                    'gross_amount'  =>  $result['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown']['gross_amount']['value'],
+                    'paypal_fee'    =>  $result['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown']['paypal_fee']['value'],
+                    'net_amount'    =>  $result['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown']['net_amount']['value'],
+                    'status'        =>  $result['status'],
+                    'paypal_client' =>  $result['payer']['payer_id'],
+                    'paypal_email'  =>  $result['payer']['email_address'],
+                    'transactionID' =>  $resOrder['purchase_units'][0]['payments']['captures'][0]['id']
+                ];
+
+                $insOrder   =   PaypalOrder::DataUpdate($iResult);
+
+                $user       =   User::where('id','=',auth()->user()->id)->first();
+
+                $divisa     =   Scrapers::getLast();
+                $type       =   TransferenceType::where([ ['status_id', '=', 1], ['name', 'like', '%dol%'] ])->first();
+                $status     =   TransferenceStatus::where([ ['status_id', '=', 1], ['name', 'like', '%pen%'] ])->first();
+
+                $fileName   =   auth()->user()->client->client_id.'-'.$identified.'-'.time().'.jpg';
+
+
+                $img        =   Image::make(public_path('/src/images/supPaypal.png'));  
+                $img->text($iResult['net_amount'], 510, 112.5, function($font) {  
+                    $font->size(12);  $font->file(public_path('src/images/fonts/Montserrat-Italic.ttf')); $font->color('#00000');  $font->align('center');  $font->valign('bottom');    
+                });
+                $img->text($user->name, 300, 170, function($font) {  
+                    $font->size(12);  $font->file(public_path('src/images/fonts/Montserrat-Italic.ttf'));$font->color('#00000');  $font->align('center');  $font->valign('bottom');    
+                });
+                $img->text($iResult['paypal_email'], 300, 195, function($font) {  
+                    $font->size(12);  $font->file(public_path('src/images/fonts/Montserrat-Italic.ttf'));$font->color('#00000');  $font->align('center');  $font->valign('bottom');    
+                });   
+                $img->text('$ '.$iResult['net_amount'].'', 250, 257, function($font) {  
+                    $font->size(20);  $font->file(public_path('src/images/fonts/Montserrat-Italic.ttf'));$font->color('#00000');  $font->align('center');  $font->valign('bottom');    
+                });   
+                $img->text('$ '.$iResult['paypal_fee'].'', 230, 307, function($font) {  
+                    $font->size(20);  $font->file(public_path('src/images/fonts/Montserrat-Italic.ttf'));$font->color('#00000');  $font->align('center');  $font->valign('bottom');    
+                });
+                $img->text('$ '.$iResult['gross_amount'].'', 240, 364, function($font) {  
+                    $font->size(20);  $font->file(public_path('src/images/fonts/Montserrat-Italic.ttf'));$font->color('#00000');  $font->align('center');  $font->valign('bottom');    
+                });
+                $img->save(base_path('public/files/transference/'.$fileName.''));
+
+                $data   =   [
+                    'identified'    =>  $identified,
+                    'name'          =>  $fileName,
+                    'dir'           =>  'files/paypal'
+                ];
+
+                $rTransference  =   TransferenceFile::RegFile($data);
+               
+                $iData  =   [
+                    'identified'    =>   $identified,
+                    'client_id'     =>   auth()->user()->client->client_id,
+                    'subject'       =>   'Paypal Payment - Invoice: $'.$iResult['gross_amount'].'',
+                    'title'         =>   'Paypal Payment - Invoice: $'.$iResult['gross_amount'].'',
+                    'date_trans'    =>   date("Y-m-d"),
+                    'reference'     =>   $iResult['transactionID'],
+                    'total'         =>   $iResult['net_amount'],
+                    'bs'            =>   round( ($iResult['net_amount'] * $divisa->dolar), 2),
+                    'email'         =>   $iResult['paypal_email'],
+                    'description'   =>   'Paypal Payment - Invoice: $'.$iResult['gross_amount'].' - Fee: $'.$iResult['paypal_fee'].' - Total: $'.$iResult['net_amount'].'',
+                    'type'          =>   $type->id,
+                    'status'        =>   $status->id,
+                ];
+        
+                $reg        =   TransferencePaypal::RegisteTrans($iData);
+
+                $myWallet   =   $user->getWallet(auth()->user()->identified);
+            
+                $transaction    =   $myWallet->depositFloat($iResult['net_amount'], 
+                    [
+                        'Description'   =>  'Paypal Payment - Invoice: $'.$iResult['gross_amount'].' - Fee: $'.$iResult['paypal_fee'].' - Total: $'.$iResult['net_amount'].'',
+                        'USD'           =>  $iResult['net_amount'],
+                        'BS'            =>  ROUND( ($iResult['net_amount'] / $divisa->dolar), 2),
+                        'DIVISA'        =>  $divisa->dolar,
+                    ], false);
+                
+                $iPend   =   [
+                    'identified'    =>  $identified,
+                    'client'        =>  auth()->user()->client->client_id,
+                    'transaction'   =>  $transaction->id,
+                    'status'        =>  $status->id,
+                    'method'        =>  TransferenceMethod::where('name', 'like', '%pay%')->first()->id
+                ];
+    
+                $pen    =   TransferencePending::RegisteTrans($iPend);
+
+                $trans  =   TransferencePending::where('identified', '=', $identified)->first()->transaction;
+
+                $iPend      =   $user->transactions()->where([['wallet_id', $myWallet->id], ['id', $trans], ['confirmed', 0]])->first();
+
+                if($myWallet->confirm($iPend) == true)
+                {
+                    $report             =   TransferencePaypal::where('identified', '=', $identified)->first();
+            
+                    $report->status_id  =   TransferenceStatus::where('name','like','%proce%')->first()->id;
+                    $report->save();
+        
+                    $pending            =   TransferencePending::where('identified', '=', $identified)->first();
+                    $pending->status_id =   TransferenceStatus::where('name','like','%proce%')->first()->id;
+                    $pending->save();
+        
+                }
+
+                return view('page/clients/wallet/paypal/confirmed',[
+                    'd'     =>  $iResult,
+                    'u'     =>  $user
+                ]);            
+            }         
+                
+        } catch (\Exception $e) {
+
+            return view('pages/clients/wallet/paypal/process');
+        }
+    }
+
+    public function Cancel(Request $request)
+    {
+        try {
+            if(isset($request->token) <> false)
+            {
+                $cancel     =   PaypalOrder::DataGet($request->token);
+                $cancel->status     =   'CANCEL';
+                $cancel->save();
+
+                return view('page/clients/wallet/paypal/cancel');
+                
+            }else{
+                return redirect('/404');
+            }
+        } catch (\Exception $e) {
+            return redirect('/404');
+        }
+    }
+
     private function CalculatorPaypal($amount, $ty)
     {
 
@@ -296,5 +547,102 @@ class PaypalController extends Controller
         ];
 
         return $iData;
+    }
+
+    private function getAccessToken($clientId, $secret)
+    {
+        try {
+            $response   =   $this->client->request('POST', '/v1/oauth2/token', [
+                'header'    =>  [
+                    'Accept'        =>  'application/json',
+                    'Content-Type'  =>  'application/x-www-form-urlencoded',
+                ],
+                'body'  =>  'grant_type=client_credentials',
+                'auth'  =>  [
+                    $clientId, 
+                    $secret, 
+                    'basic'
+                ]
+            ]);
+          
+            $data   =   json_decode($response->getBody(), true);
+
+            return  $data['access_token'];
+
+        } catch (\Exception $e)  { return false; }
+    }
+
+    private function getHeaders()
+    {
+        return  [
+            'Accept'        => 'application/json',
+            'Authorization' => 'Bearer ' . $this->accessToken,
+            'Content-Type'  => 'application/json'
+        ];
+    }
+
+    private function OrderBody($iData)
+    {
+        return json_encode([
+            "intent"            =>  "CAPTURE",
+            "purchase_units"    =>  [
+                [
+                    "amount"    =>  [
+                        "currency_code" =>  "USD",
+                        "value" =>  $iData["amount"]
+                    ],
+                ],
+            ],
+            "application_context"   =>  [
+                "brand_name"    =>  "BoomSolutions - Venezuela",
+                "landing_page"  =>  "NO_PREFERENCE",
+                "user_action"   =>  "PAY_NOW",
+                "return_url"    =>  $iData["http"]."://".$iData["host"]."/paypal/process",
+                "cancel_url"    =>  $iData["http"]."://".$iData["host"]."/paypal/cancel"                
+            ]
+        ]);
+    }
+
+    private function CreateOrder($iData)
+    {
+        $iResult    =   false;
+
+        try {
+            $response = $this->client->request('POST', '/v2/checkout/orders', [
+                    'headers'   =>  $this->getHeaders(),
+                    'body'      =>  $this->OrderBody($iData)
+                ],
+            );
+    
+            $result     =   json_decode($response->getBody(), true);
+            
+            foreach ($result['links'] as $r => $res) {   if($res['rel'] == "approve")  { $link   =   $res['href'];   }   }
+
+            $iResult    =   [
+                'identified'    =>  $iData["identified"],
+                'client_id'     =>  auth()->user()->client->client_id,
+                'invoice_id'    =>  $iData["invoice_id"],
+                'orderID'       =>  $result['id'],
+                'currency'      =>  'USD',
+                'amount'        =>  $iData["invo"],
+                'tax'           =>  $iData['comi'],
+                'total'         =>  $iData['amount'],
+                'link'          =>  $link,
+                'status'        =>  ''
+            ];
+
+            $insOrder   =   PaypalOrder::DataInsert($iResult);
+
+            if($insOrder <> false)
+            {
+                return $iResult;
+            }else{
+                return false;
+            }
+            
+        } catch (\Exception $e) {
+
+            return $iResult;
+        }
     }
 }

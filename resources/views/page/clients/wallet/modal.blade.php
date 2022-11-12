@@ -15,8 +15,6 @@
                         </div>
                     </div>
                     <div class="row">
-                        
-
                         <div class="col-xl-12 col-md-12">
                             <dl class="dl-horizontal row">
                                 <dt class="col-sm-3">Asunto</dt>

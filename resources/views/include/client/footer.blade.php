@@ -26,4 +26,12 @@
 <script type="text/javascript" src="{{ asset('src/plugins/sweetalert/js/sweetalert.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('src/plugins/owl.carousel/js/owl.carousel.min.js') }}"></script>
 
+<script type="text/javascript" src="{{ asset('src/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('src/plugins/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('src/plugins/datatables.net-buttons/js/buttons.print.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('src/plugins/datatables.net-buttons/js/buttons.html5.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('src/plugins/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('src/plugins/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('src/plugins/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js') }}"></script>
+
 <script type="text/javascript" src="{{ asset('src/js/general.js') }}"></script>

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Clients;
 
 use App\Http\Controllers\Controller;
+use App\Models\Clients\General\Status;
 use App\Models\Clients\Payments\Scrapers;
+use App\Models\Clients\Voucher\VoucherImage;
 use App\Models\Clients\Voucher\VoucherLog;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -38,9 +40,13 @@ class TicketController extends Controller
                 ];
             }
         }
+        
+        $iPhotos    =   VoucherImage::where('status_id', '=', Status::where('name', 'like', '%act%')->first()->id)->orderBy('id', 'ASC')->get();
+
         return view('page/clients/vouchers/index',[
             'c'     =>  count($info),
-            'inf'   =>  $iData
+            'inf'   =>  $iData,
+            'pho'   =>  $iPhotos,
         ]);
     }
 

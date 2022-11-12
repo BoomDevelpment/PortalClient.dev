@@ -26,4 +26,9 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('src/plugins/owl.carousel/css/owl.carousel.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('src/plugins/owl.carousel/css/owl.theme.default.css') }}">
 
+<link rel="stylesheet" type="text/css" href="{{ asset('src/plugins/data-table/css/buttons.dataTables.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('src/plugins/datatables.net-bs4/css/dataTables.bootstrap4.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('src/plugins/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css') }}">
+
+
 <meta name="csrf-token" content="{{ csrf_token() }}" />
