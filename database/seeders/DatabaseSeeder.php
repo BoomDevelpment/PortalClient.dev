@@ -8,6 +8,7 @@ use App\Models\Clients\CustomerServices\CustomerRequest;
 use App\Models\Clients\CustomerServices\CustomerRequestType;
 use App\Models\Clients\Pivot\ClientUser;
 use App\Models\Clients\Pivot\OperatorUser;
+use App\Models\Clients\Survery\SurveyQuestionsType;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -74,6 +75,11 @@ class DatabaseSeeder extends Seeder
         $this->call(CustomerRequestSeeder::class); 
         $this->call(CustomerTypeSeeder::class); 
         $this->call(CustomerImagenSeeder::class); 
-
+    
+        $this->call(SurveyQuestionsTypeSeeder::class);     
+        $this->call(SurveyQuestionsSeeder::class);     
+        $this->call(SurveyOptionsQuestionsSeeder::class);     
+        $this->call(SurveySeeder::class);     
+        $this->call(SurveyReferredSeeder::class);     
     }
 }
