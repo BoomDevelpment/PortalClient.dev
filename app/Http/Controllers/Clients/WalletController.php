@@ -18,6 +18,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class WalletController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        
+        $this->middleware('survey'); 
+    }
+    
     public function index(Request $request)
     {
         try {

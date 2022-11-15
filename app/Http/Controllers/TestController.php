@@ -45,10 +45,16 @@ use Goutte\Client as gClient;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 
+use Symfony\Component\Process\Process;
+
 class TestController extends Controller
 {
     public static function index(Request $request)
     {
+        // $process = new Process(['speedtest']);
+
+        // dd($process, $process->run());
+        
         $user       =   User::find(3);
         $myWallet   =   $user->getWallet($user->identified);
         dd($myWallet->balanceFloat);

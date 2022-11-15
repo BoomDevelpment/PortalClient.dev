@@ -13,6 +13,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class InvoicesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        
+        $this->middleware('survey'); 
+    }
+    
     public function index(Request $request)
     {
         try {

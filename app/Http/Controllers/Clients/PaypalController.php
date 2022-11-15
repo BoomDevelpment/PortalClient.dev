@@ -31,6 +31,8 @@ class PaypalController extends Controller
 
         $this->middleware('auth');
 
+        $this->middleware('survey');
+
         $credentials    =   Paypal::WHERE('status_id', 'like', '%'. Status::WHERE('name', 'LIKE', '%act%')->get()[0]->id .'%')->get();
 
         if(COUNT($credentials) > 0)

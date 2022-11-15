@@ -9,11 +9,13 @@ use App\Http\Controllers\Clients\InvoicesController;
 use App\Http\Controllers\Clients\PagoMovilController;
 use App\Http\Controllers\Clients\PaypalController;
 use App\Http\Controllers\Clients\ProfileController;
+use App\Http\Controllers\Clients\SurveyController;
 use App\Http\Controllers\Clients\TicketController;
 use App\Http\Controllers\Clients\TransferenceController;
 use App\Http\Controllers\Clients\WalletController;
 use App\Http\Controllers\Clients\ZelleController;
 use App\Http\Controllers\TestController;
+use App\Http\Middleware\Survey;
 use App\Models\Clients\Profile\Client;
 use App\Models\Clients\Profile\Operator;
 use Illuminate\Support\Facades\Route;
@@ -41,7 +43,7 @@ Route::get('/', function () {
         try {
             $ope    =   Operator::findOrFail(auth()->user()->operator->operator_id);
             return redirect('/admins');
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             return redirect('/login');
         }
     }
@@ -58,6 +60,12 @@ Auth::routes();
 Route::group(['prefix'  =>  '/dashboard'], function() 
 {
     Route::get('/',                [ClientsController::class,   'Dashboard'])->name('/');
+});
+
+Route::group(['prefix'  =>  '/encuesta'], function() 
+{
+    Route::get('/',             [SurveyController::class,   'Index'])->name('/');
+    Route::post('/register',    [SurveyController::class,   'Register'])->name('/register');
 });
 
 Route::group(['prefix'  =>  '/profile'], function() 
