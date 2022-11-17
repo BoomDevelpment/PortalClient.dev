@@ -55,12 +55,12 @@
                                             <div class="group-add-on">
                                                 <div class="radio radiofill radio-inline">
                                                     <label>
-                                                        <input type="radio" id="iGender" name="iGender" value="1" <?php if ($data['gender_id'] == "1") echo "checked"; ?>><i class="helper"></i> Male
+                                                        <input type="radio" id="iGender" name="iGender" value="1" <?php if ($data['gender_id'] == "1") echo "checked"; ?>><i class="helper"></i> Masculino
                                                     </label>
                                                 </div>
                                                 <div class="radio radiofill radio-inline">
                                                     <label>
-                                                        <input type="radio" id="iGender" name="iGender" value="2" <?php if ($data['gender_id'] == "2") echo "checked"; ?>><i class="helper"></i> Female
+                                                        <input type="radio" id="iGender" name="iGender" value="2" <?php if ($data['gender_id'] == "2") echo "checked"; ?>><i class="helper"></i> Femenino
                                                     </label>
                                                 </div>
                                             </div>
@@ -75,6 +75,40 @@
                                         <input type="text" class="form-control" id="iLatitud" name="iLatitud" placeholder="Latitud" value="{{ $data['latitude'] }}">
                                         <span class="input-group-addon"><i class="icofont icofont-location-pin"></i></span>
                                         <input type="text" class="form-control" id="iLongitud" name="iLongitud" placeholder="Longitud" value="{{ $data['longitude'] }}">
+                                    </div>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="icofont icofont-location-pin"></i></span>
+                                        <select class="form-control m-b-10" name="cMonth" id="cMonth">
+                                            <option value="">Seleccione un Estado</option>
+                                            <option value="01">ENERO</option>
+                                            <option value="02">FEBRERO</option>
+                                            <option value="03">MARZO</option>
+                                            <option value="04">ABRIL</option>
+                                            <option value="05">MAYO</option>
+                                            <option value="06">JUNIO</option>
+                                            <option value="07">JULIO</option>
+                                            <option value="08">AGOSTO</option>
+                                            <option value="09">SEPTIEMBRE</option>
+                                            <option value="10">OCTUBRE</option>
+                                            <option value="11">NOVIEMBRE</option>
+                                            <option value="12">DICIEMBRE</option>
+                                        </select>
+                                        <span class="input-group-addon"><i class="icofont icofont-location-pin"></i></span>
+                                        <select class="form-control m-b-10" name="cMonth" id="cMonth">
+                                            <option value="">Seleccione una Ciudad</option>
+                                            <option value="01">ENERO</option>
+                                            <option value="02">FEBRERO</option>
+                                            <option value="03">MARZO</option>
+                                            <option value="04">ABRIL</option>
+                                            <option value="05">MAYO</option>
+                                            <option value="06">JUNIO</option>
+                                            <option value="07">JULIO</option>
+                                            <option value="08">AGOSTO</option>
+                                            <option value="09">SEPTIEMBRE</option>
+                                            <option value="10">OCTUBRE</option>
+                                            <option value="11">NOVIEMBRE</option>
+                                            <option value="12">DICIEMBRE</option>
+                                        </select>
                                     </div>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="icofont icofont-mobile-phone"></i></span>
