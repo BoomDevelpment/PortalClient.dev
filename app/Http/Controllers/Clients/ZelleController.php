@@ -18,6 +18,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ZelleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        
+        $this->middleware('survey'); 
+    }
+    
     public function Verificate(Request $request)
     {
         try {

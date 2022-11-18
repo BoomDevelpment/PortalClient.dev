@@ -17,6 +17,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TransferenceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        
+        $this->middleware('survey'); 
+    }
+    
     public function Register(Request $request)
     {
         $validator      =   Validator::make($request->all(), [

@@ -57,11 +57,11 @@
                                                 <div class="row">
                                                     <div class="col-xs-12 col-sm-12 col-md-8" >
                                                         <label >C&oacute;digo</label>
-                                                        <input type="number" name="cNumber" id="cNumber" class="form-control" placeholder="C&oacute;digo de tarjeta">
+                                                        <input type="text" name="cNumber" id="cNumber" class="form-control tdcve"  data-mask="9999999999999999"  placeholder="C&oacute;digo de tarjeta">
                                                     </div>
                                                     <div class="col-xs-12 col-sm-12 col-md-4">
                                                         <label>CVV</label>
-                                                        <input type="number" name="cCvv" id="cCvv" class="form-control" placeholder="CVV">
+                                                        <input type="text" name="cCvv" id="cCvv" class="form-control tdccvv" data-mask="999" placeholder="CVV">
                                                     </div>
                                                 </div>
                                             </div>

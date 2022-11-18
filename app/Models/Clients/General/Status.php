@@ -2,6 +2,7 @@
 
 namespace App\Models\Clients\General;
 
+use App\Models\Clients\Country\Estados;
 use App\Models\Clients\Donative\DonativeImage;
 use App\Models\Clients\Donative\DonativeVideo;
 use App\Models\Clients\Invoices\InvoicesStatus;
@@ -58,4 +59,6 @@ class Status extends Model
 
     public function donimage()      {   return $this->hasOne(DonativeImage::class);         }
     public function donvideo()      {   return $this->hasOne(DonativeVideo::class);         }
+    
+    public function estado()        {   return $this->belongsTo(Estados::class);         }
 }

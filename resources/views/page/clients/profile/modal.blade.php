@@ -21,11 +21,11 @@
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12 col-md-8" >
                                         <label >C&oacute;digo</label>
-                                        <input type="number" name="mNumber" id="mNumber" class="form-control" placeholder="C&oacute;digo de tarjeta">
+                                        <input type="text" name="mNumber" id="mNumber" class="form-control tdcve" data-mask="9999999999999999" placeholder="C&oacute;digo de tarjeta">
                                     </div>
                                     <div class="col-xs-12 col-sm-12 col-md-4">
                                         <label>CVV</label>
-                                        <input type="number" name="mCvv" id="mCvv" class="form-control" placeholder="CVV">
+                                        <input type="text" name="mCvv" id="mCvv" class="form-control tdccvv" data-mask="999" placeholder="CVV">
                                     </div>
                                 </div>
                             </div>
@@ -125,7 +125,7 @@
                             </div>
                             <div class="form-group">
                                 <label>C&oacute;digo</label></label>
-                                <input type="number" class="form-control" id="abNumber" name="abNumber" placeholder="C&oacute;digo de Cuenta">
+                                <input type="text" class="form-control abve" id="abNumber" name="abNumber" data-mask="9999-9999-99-9999999999" placeholder="C&oacute;digo de Cuenta">
                                 <input type="number" class="form-control" id="abId" name="abId" hidden>
                             </div>
                             <div class="form-group">

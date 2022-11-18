@@ -2,6 +2,9 @@
 
 namespace App\Models\Clients\Profile;
 
+use App\Models\Clients\Country\City;
+use App\Models\Clients\Country\Estate;
+use App\Models\Clients\Country\Municipality;
 use App\Models\Clients\CustomerServices\CustomerServices;
 use App\Models\Clients\General\Gender;
 use App\Models\Clients\General\Status;
@@ -15,10 +18,14 @@ class Client extends Model
 {
     use HasFactory;
 
-    public function status()    {   return $this->belongsTo(Status::class);             }
-    public function gender()    {   return $this->belongsTo(Gender::class);             }    
-    public function clientab()  {   return $this->hasOne(AccountBank::class);           }
-    public function clientcc()  {   return $this->hasOne(CreditCard::class);            }
+    public function status()    {   return $this->belongsTo(Status::class);                 }
+    public function gender()    {   return $this->belongsTo(Gender::class);                 }    
+    public function clientab()  {   return $this->hasOne(AccountBank::class);               }
+    public function clientcc()  {   return $this->hasOne(CreditCard::class);                }
+    
+    public function estate()        {   return $this->belongsTo(Estate::class);         }
+    public function city()          {   return $this->belongsTo(City::class);           }
+    public function municipality()  {   return $this->belongsTo(Municipality::class);   }
 
     public function customers() {   return $this->hasMany(CustomerServices::class);     }
 
@@ -41,14 +48,19 @@ class Client extends Model
             $pivot                      =   ClientUser::where('client_id', '=', $data['iId'])->get();
             $user                       =   User::findOrFail($pivot[0]->user_id);
 
-            $client->name               =   ( ( isset($data['iName']) )         ?   strtoupper($data['iName'])      : '' );
+            
+
+            $client->name               =   ( ( isset($data['iName']) )         ?   ucfirst($data['iName'])     : '' );
             $client->birthday           =   ( ( isset($data['iBirthday']) )     ?   $data['iBirthday']              : date("Y-m-d", strtotime( date("Y-m-d")."- 18 year")) );
             $client->gender_id          =   ( ( isset($data['iGender']) )       ?   $data['iGender']                : '1' );
-            $client->address            =   strtoupper($data['iAddress']);
-            $client->latitude           =   ( ( isset($data['iLatitud']) )      ?   $data['iLatitud']               : '00.00000' );
-            $client->longitude          =   ( ( isset($data['iLongitud']) )     ?   $data['iLongitud']              : '-00.00000' );
-            $client->phone_principal    =   ( ( isset($data['iPhone']) )        ?   $data['iPhone']                 : '' );
-            $client->phone_alternative  =   ( ( isset($data['iPhoneAlt']) )     ?   $data['iPhoneAlt']              : '' );
+            $client->address            =   ucfirst($data['iAddress']);
+            $client->estate_id          =   $data['iState'];
+            $client->city_id            =   $data['iTown'];
+            $client->municipality_id    =   $data['iMunicipality'];
+            $client->latitude           =   ( ( isset($data['iLatitud']) )      ?   $data['iLatitud']               : '00.000000' );
+            $client->longitude          =   ( ( isset($data['iLongitud']) )     ?   $data['iLongitud']              : '-00.000000' );
+            $client->phone_principal    =   ( ( isset($data['iPhone']) )        ?   intval(preg_replace('/[^0-9]+/', '', $data['iPhone']), 10)                 : '' );
+            $client->phone_alternative  =   ( ( isset($data['iPhoneAlt']) )     ?   intval(preg_replace('/[^0-9]+/', '', $data['iPhoneAlt']), 10)              : '' );
             $client->email_principal    =   ( ( isset($data['iEmail']) )        ?   strtolower($data['iEmail'])     : '' );
             $client->email_alternative  =   ( ( isset($data['iEmailAlt']) )     ?   strtolower($data['iEmailAlt'])  : '' );
             $client->instagram          =   ( ( isset($data['iInstagram']) )    ?   strtolower($data['iInstagram']) : '' );
@@ -63,6 +75,7 @@ class Client extends Model
             $user->save();
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return false;
         }
     }

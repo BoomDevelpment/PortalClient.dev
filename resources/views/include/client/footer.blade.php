@@ -34,4 +34,9 @@
 <script type="text/javascript" src="{{ asset('src/plugins/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('src/plugins/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js') }}"></script>
 
+<script type="text/javascript" src="{{ asset('src/plugins/form-masking/inputmask.js') }}"></script>
+<script type="text/javascript" src="{{ asset('src/plugins/form-masking/jquery.inputmask.js') }}"></script>
+<script type="text/javascript" src="{{ asset('src/plugins/form-masking/autoNumeric.js') }}"></script>
+<script type="text/javascript" src="{{ asset('src/plugins/form-masking/form-mask.js') }}"></script>
+
 <script type="text/javascript" src="{{ asset('src/js/general.js') }}"></script>

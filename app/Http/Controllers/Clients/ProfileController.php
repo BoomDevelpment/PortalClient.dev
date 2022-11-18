@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Clients;
 
 use App\Http\Controllers\Controller;
+use App\Models\Clients\Country\City;
+use App\Models\Clients\Country\Estate;
+use App\Models\Clients\Country\Municipality;
 use App\Models\Clients\General\Bank;
 use App\Models\Clients\General\Status;
 use App\Models\Clients\Payments\AccountBank;
@@ -20,11 +23,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ProfileController extends Controller
 {
+    
+    public function __construct()
+    {
+        $this->middleware('auth');
+        
+        $this->middleware('survey'); 
+    }
+
+    
     public function index(Request $request)
     {
         try {
 
-            $cli    =   Client::GetClient(['field'=>'id', 'id' => auth()->user()->client->client_id]);
+            $cli        =   Client::GetClient(['field'=>'id', 'id' => auth()->user()->client->client_id]);
+            $estados    =   Estate::where('name', 'like', '%lara%')->orWhere('name', 'like', '%yara%')->orderBy('id', 'ASC')->get();
 
             return view('page/clients/profile/index',[
                 'data'      =>  $cli,
@@ -36,7 +49,9 @@ class ProfileController extends Controller
                 'cc_type'   =>  CreditCardType::get(),
                 'ab_entity' =>  AccountBankEntity::get(),
                 'ab_type'   =>  AccountBankType::get(),
-            
+                'estate'    =>  $estados,
+                'town'      =>  City::where('estate_id', '=', $estados[0]->id)->orWhere('estate_id', '=', $estados[1]->id)->orderBy('id', 'ASC')->get(),
+                'township'  =>  Municipality::where('estate_id', '=', $estados[0]->id)->orWhere('estate_id', '=', $estados[1]->id)->orderBy('id', 'ASC')->get()            
             ]);
 
         } catch (\Exception $e) {
@@ -56,7 +71,7 @@ class ProfileController extends Controller
                 'iPhone'    => 'required',
                 'iEmail'    => 'required',
             ]);
-    
+
             if ($validator->fails()) 
             {   
                 return response()->json([
