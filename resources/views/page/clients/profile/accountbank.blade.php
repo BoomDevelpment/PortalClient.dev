@@ -59,7 +59,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label>C&oacute;digo</label></label>
-                                            <input type="number" class="form-control" id="aNumber" name="aNumber" placeholder="C&oacute;digo de Cuenta">
+                                            <input type="text" class="form-control abve" id="aNumber" name="aNumber" data-mask="9999-9999-99-9999999999" placeholder="C&oacute;digo de Cuenta">
                                         </div>
                                         <div class="form-group" id="expiration-date">
                                             <div class="row">

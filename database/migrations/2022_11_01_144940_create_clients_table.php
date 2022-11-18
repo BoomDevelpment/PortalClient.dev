@@ -19,23 +19,29 @@ class CreateClientsTable extends Migration
             $table->string('name');
             $table->string('birthday', 50);
             $table->text('address');
+            $table->integer('estate_id')->unsigned();
+            $table->integer('city_id')->unsigned();
+            $table->integer('municipality_id')->unsigned();
             $table->string('latitude', 50);
             $table->string('longitude', 50);
             $table->string('phone_principal', 50);
             $table->string('phone_alternative', 50);
             $table->string('email_principal');
             $table->string('email_alternative');
-            $table->integer('batch')->unsigned()->default(1);
+            $table->integer('batch')->unsigned();
             $table->string('facebook');
             $table->string('instagram');
             $table->string('twitter');
             $table->string('youtube');
             $table->string('advertising', 2)->default('SI');
 
-            $table->integer('gender_id')->unsigned()->default(1);
-            $table->integer('status_id')->unsigned()->default(1);
+            $table->integer('gender_id')->unsigned();
+            $table->integer('status_id')->unsigned();
             $table->timestamps();
 
+            $table->foreign('estate_id')->references('id')->on('estates');
+            $table->foreign('city_id')->references('id')->on('cities');
+            $table->foreign('municipality_id')->references('id')->on('municipalities');
             $table->foreign('gender_id')->references('id')->on('genders');
             $table->foreign('status_id')->references('id')->on('statuses');
 

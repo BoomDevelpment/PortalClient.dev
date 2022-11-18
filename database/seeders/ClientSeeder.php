@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Clients\Country\City;
+use App\Models\Clients\Country\Estate;
+use App\Models\Clients\Country\Municipality;
 use App\Models\Clients\General\Gender;
 use App\Models\Clients\General\Status;
 use App\Models\Clients\Profile\Client;
@@ -20,16 +23,22 @@ class ClientSeeder extends Seeder
      */
     public function run()
     {
-        $status     =   Status::where('name', 'like', '%act%')->first()->id;
-        $gender     =   Gender::where('name', 'like', '%masc%')->first()->id;
+        $status         =   Status::where('name', 'like', '%act%')->first()->id;
+        $gender         =   Gender::where('name', 'like', '%masc%')->first()->id;
+        $estate         =   Estate::where('name', 'like', '%lara%')->first()->id;
+        $city           =   City::where('name', 'like', '%barq%')->first()->id;
+        $municipality   =   Municipality::where('name', 'like', '%iriba%')->first()->id;
 
         $data[0]    =   [
             'mikrowisp'         =>  16,
             'name'              =>  strtoupper('Development - Cliente de pruebas'),
             'birthday'          =>  "1985-11-19",
             'address'           =>  strtoupper('avenida libertador, centro metropolitano javier'),
-            'latitude'          =>  strtoupper('00.000000000000000'),
-            'longitude'         =>  strtoupper('-00.000000000000000'),
+            'estate'            =>  $estate,
+            'city'              =>  $city,
+            'municipality'      =>  $municipality,
+            'latitude'          =>  strtoupper('00.000000'),
+            'longitude'         =>  strtoupper('-00.000000'),
             'phone_principal'   =>  strtoupper('584245387921'),
             'phone_alternative' =>  strtoupper('584145659075'),
             'email_principal'   =>  strtolower('luis.924@boomsolutions.com'),
@@ -51,6 +60,9 @@ class ClientSeeder extends Seeder
             $new->name              =   $da['name'];
             $new->birthday          =   $da['birthday'];
             $new->address           =   $da['address'];
+            $new->estate_id         =   $da['estate'];
+            $new->city_id           =   $da['city'];
+            $new->municipality_id   =   $da['municipality'];
             $new->latitude          =   $da['latitude'];
             $new->longitude         =   $da['longitude'];
             $new->phone_principal   =   $da['phone_principal'];
