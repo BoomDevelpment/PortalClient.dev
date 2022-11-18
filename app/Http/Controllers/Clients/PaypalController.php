@@ -78,7 +78,7 @@ class PaypalController extends Controller
     
             if($verf)
             {
-                foreach ($verf as $v => $ver)   {   if( strpos( substr($ver->reference, -5), substr($request->r, -5) ) !== false ){   $iComp  =   true; }  }
+                foreach ($verf as $v => $ver)   {   if( strpos( substr($ver->reference, -6), substr($request->r, -6) ) !== false ){   $iComp  =   true; }  }
                 
                 if($iComp == true)
                 {
@@ -108,7 +108,6 @@ class PaypalController extends Controller
     
     public function Register(Request $request)
     {
-        
         $validator      =   Validator::make($request->all(), [
             'p_asu'         => 'required|min:5',
             'p_date'        => 'required',
@@ -116,7 +115,7 @@ class PaypalController extends Controller
             'p_reference'   => 'required',
             'p_email'       => 'required|min:5',
         ]);
-       
+      
         if ($validator->fails()) 
         {   
             return response()->json([
@@ -125,9 +124,9 @@ class PaypalController extends Controller
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-        $verf   =   TransferencePaypal::GeTransferences(auth()->user()->client->client_id);
+        // $verf   =   TransferencePaypal::GeTransferences(auth()->user()->client->client_id);
 
-        $iComp  =   false;
+        // $iComp  =   false;
 
         if(COUNT(TransferenceFile::SearchFile($request->p_ide)) == 0)
         {
@@ -136,12 +135,32 @@ class PaypalController extends Controller
                 'message' => 'Para completar la solicitud debe ingresar al menos un archivo adjunto.',
             ], Response::HTTP_UNAUTHORIZED); 
         }
-        
+
+        $verificate =   false;
         $divisa     =   Scrapers::getLast();
         $type       =   TransferenceType::where([ ['status_id', '=', 1], ['name', 'like', '%dol%'] ])->get()[0];
         $status     =   TransferenceStatus::where([ ['status_id', '=', 1], ['name', 'like', '%pen%'] ])->get()[0];
 
-        $total      =   round( ($request->p_total - ( ($request->p_total * 0.054) + 0.30) ), 2);
+        try {
+            $responseOrder   =   $this->client->request('GET', '/v2/payments/captures/'.$request->p_reference.'', [
+                'headers'   =>  $this->getHeaders(),
+                ],
+            );
+
+            $resOrder       =   json_decode($responseOrder->getBody(), true);
+
+            if($resOrder['final_capture'])
+            {
+                $total      =   round( ($resOrder['amount']['value'] - ( ($resOrder['amount']['value'] * 0.054) + 0.30) ), 2);
+                $verificate =   true;
+            }else{
+                $total      =   round( ($request->p_total - ( ($request->p_total * 0.054) + 0.30) ), 2);
+                $verificate =   false;
+            }
+        } catch (\Exception $e) {
+            $total          =   round( ($request->p_total - ( ($request->p_total * 0.054) + 0.30) ), 2);
+            $verificate     =   false;
+        }
 
         $iData  =   [
             'identified'    =>   $request->p_ide,
@@ -185,11 +204,37 @@ class PaypalController extends Controller
 
             if($pen <> false)
             {
+
+                if($verificate == true)
+                {
+                    $trans  =   TransferencePending::where('identified', '=', $request->p_ide)->first()->transaction;
+    
+                    $iPend      =   $user->transactions()->where([['wallet_id', $myWallet->id], ['id', $trans], ['confirmed', 0]])->first();
+    
+                    if($myWallet->confirm($iPend) == true)
+                    {
+                        $report             =   TransferencePaypal::where('identified', '=', $request->p_ide)->first();
+                
+                        $report->status_id  =   TransferenceStatus::where('name','like','%proce%')->first()->id;
+                        $report->save();
+            
+                        $pending            =   TransferencePending::where('identified', '=', $request->p_ide)->first();
+                        $pending->status_id =   TransferenceStatus::where('name','like','%proce%')->first()->id;
+                        $pending->save();
+                    }
+
+                    return response()->json([
+                        'success'   =>  true,
+                        'message'   =>  'Codigo de referencia verificado con Paypal bajo los siguientes parametros: Total Enviado: $'.$resOrder['amount']['value'].' Total Recibido: $'.$iData['total'].'',
+                        'url'       =>  url('/wallet')
+                    ], Response::HTTP_OK);
+                
+                }
                 return response()->json([
-                    'success'   =>  true,
-                    'message'   =>  'Datos almacenados correctamente.',
-                    'url'       =>  url('/wallet')
-                ], Response::HTTP_OK);        
+                    'success'       =>  true,
+                    'message'       =>  'Los datos fueron almacenados correctamente, pendiente por verificaci&oacute;n.',
+                    'url'           =>  url('/wallet')
+                ], Response::HTTP_OK);
 
             }else{
 

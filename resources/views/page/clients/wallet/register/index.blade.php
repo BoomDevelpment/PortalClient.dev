@@ -16,7 +16,6 @@
 
 $(function() 
 {   
-
     RandomTp();
 
     $("#handleZelleUpload").submit(function(e) 
@@ -397,11 +396,13 @@ function ProcessPaypal()
         document.getElementById('PaypalFiles').innerText='';
         $('#handlePaypal')[0].reset();
         $("#pError").html(""); 
-        $("#errorPaypal").html("<div class='alert alert-success' style='margin-bottom: 0;'>" + data.message + "</div>");
+        swal("Success!", data.message, "success");
+        
+        // $("#errorPaypal").html("<div class='alert alert-success' style='margin-bottom: 0;'>" + data.message + "</div>");
         $("#pError").html(''); 
         $('#ConfirmPaypalModal').modal('hide');
 
-        setTimeout( function() { window.location = data.url; }, 2500);        
+        setTimeout( function() { window.location = data.url; }, 5000);        
 
     })
     request.fail(function(response)
