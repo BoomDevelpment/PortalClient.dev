@@ -20,7 +20,8 @@ return [
     'client_id'         => env('GOOGLE_CLIENT_ID', ''),
     'client_secret'     => env('GOOGLE_CLIENT_SECRET', ''),
     'redirect_uri'      => env('GOOGLE_REDIRECT', ''),
-    'scopes'            => [],
+    'spreadsheet_id'    => env('SPREADSHEET_ID', ''),
+    'scopes'            => [\Google\Service\Sheets::DRIVE, \Google\Service\Sheets::SPREADSHEETS],
     'access_type'       => 'online',
     'approval_prompt'   => 'auto',
 
@@ -54,7 +55,7 @@ return [
          * Path to service account json file. You can also pass the credentials as an array
          * instead of a file path.
          */
-        'file' => env('GOOGLE_SERVICE_ACCOUNT_JSON_LOCATION', ''),
+        'file' => env('GOOGLE_SERVICE_ACCOUNT_JSON_LOCATION', storage_path('credentials.json')),
     ],
 
     /*

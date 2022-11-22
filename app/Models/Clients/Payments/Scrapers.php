@@ -21,6 +21,7 @@ class Scrapers extends Model
             $new->lira      =   $data['lira'];
             $new->rublo     =   $data['rublo'];
             $new->dolar     =   $data['dolar'];
+            $new->paralelo  =   $data['paralelo'];
             $new->status_id =   1;
             $new->save();
             

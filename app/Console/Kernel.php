@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('scraper:bcv')->hourly();
+        // $schedule->command('scraper:bcv')->everyMinute();
     }
 
     /**

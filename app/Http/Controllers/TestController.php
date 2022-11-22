@@ -47,10 +47,22 @@ use Carbon\CarbonInterval;
 
 use Symfony\Component\Process\Process;
 
+use Revolution\Google\Sheets\Facades\Sheets;
+
 class TestController extends Controller
 {
     public static function index(Request $request)
     {
+        $rows = [
+            ['9.00', '10.32', '1.40', '0.53', '0.16', '10.00', '2022-11-18 19.33.29'],
+            ['9.97', '10.32', '1.40', '0.53', '0.16', '10.00', '2022-11-18 19.33.29'],
+        ];
+
+        Sheets::spreadsheet(env('SPREADSHEET_BCV'))->sheet('BCV')->range('B4:H4')->append($rows);        
+        
+        dd(config('google.spreadsheet_id'));
+
+
         // $process = new Process(['speedtest']);
 
         // dd($process, $process->run());
@@ -196,14 +208,22 @@ class TestController extends Controller
         $rublo      =   $crawler->filter('#rublo')->each(function ($node){ return    $node->text(); });
         $dolar      =   $crawler->filter('#dolar')->each(function ($node){ return    $node->text(); });    
        
-                
+        $client     =   new gClient(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+        $Goutte    =   $client->request('GET', 'https://monitordolarvenezuela.com/');
+        $filter     =   $Goutte->filter('#Costo')->each(function ($node){ return    $node->text(); });
+        $paralelo   =   ( empty($filter) == true ) ? "0.00" : trim(substr( str_replace(',','.',substr($filter[0],'0',  strlen($filter[0]))),   0, -3));
+        
         $iData  =   [
-            'euro'  =>  substr( str_replace(',','.',substr($euro[0],'4',  strlen($euro[0]))),   0, -6),
-            'yuan'  =>  substr( str_replace(',','.',substr($yuan[0],'4',  strlen($yuan[0]))),   0, -6),
-            'lira'  =>  substr( str_replace(',','.',substr($lira[0],'4',  strlen($lira[0]))),   0, -6),
-            'rublo' =>  substr( str_replace(',','.',substr($rublo[0],'4', strlen($rublo[0]))),  0, -6),
-            'dolar' =>  substr( str_replace(',','.',substr($dolar[0],'4', strlen($dolar[0]))),  0, -6),
+            'euro'      =>  substr( str_replace(',','.',substr($euro[0],'4',  strlen($euro[0]))),   0, -6),
+            'yuan'      =>  substr( str_replace(',','.',substr($yuan[0],'4',  strlen($yuan[0]))),   0, -6),
+            'lira'      =>  substr( str_replace(',','.',substr($lira[0],'4',  strlen($lira[0]))),   0, -6),
+            'rublo'     =>  substr( str_replace(',','.',substr($rublo[0],'4', strlen($rublo[0]))),  0, -6),
+            'dolar'     =>  substr( str_replace(',','.',substr($dolar[0],'4', strlen($dolar[0]))),  0, -6),
+            'paralelo'  =>  $paralelo
         ];
+
+
+        dd($iData);
 
         $get    =   Scrapers::getLast();
         $st     =   0;

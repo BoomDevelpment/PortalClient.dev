@@ -17,6 +17,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
         "paragonie/random_compat": "^9.99",
+        "revolution/laravel-google-sheets": "^5.8",
         "symfony/polyfill-php74": "^1.26",
         "symfony/process": "^5.4",
         "weidner/goutte": "^2.2"

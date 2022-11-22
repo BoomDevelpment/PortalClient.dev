@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Revolution\Google\Sheets\Facades\Sheets;
 
 class AppServiceProvider extends ServiceProvider
 {
