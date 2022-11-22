@@ -53,12 +53,13 @@ class TestController extends Controller
 {
     public static function index(Request $request)
     {
+        
+        $data   =   Scrapers::getLast();
         $rows = [
-            ['9.00', '10.32', '1.40', '0.53', '0.16', '10.00', '2022-11-18 19.33.29'],
-            ['9.97', '10.32', '1.40', '0.53', '0.16', '10.00', '2022-11-18 19.33.29'],
+            [$data->dolar, $data->euro, $data->yuan, $data->lira, $data->rublo, $data->paralelo, date_format($data->created_at,"Y-m-d H:i:s")]
         ];
 
-        Sheets::spreadsheet(env('SPREADSHEET_BCV'))->sheet('BCV')->range('B4:H4')->append($rows);        
+        Sheets::spreadsheet(env('SPREADSHEET_BCV'))->sheet('BCV')->range('B4:H4')->append($rows);
         
         dd(config('google.spreadsheet_id'));
 

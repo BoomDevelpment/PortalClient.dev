@@ -93,14 +93,19 @@ class ScrapersBCV extends Command
             if($insert <> false)
             {
 
+                $data   =   Scrapers::getLast();
+                $rows = [
+                    [round($data->dolar,2), round($data->euro,2), round($data->yuan,2), round($data->lira,2), round($data->rublo,2), round($data->paralelo,2), date_format($data->created_at,"Y-m-d H:i:s")]
+                ];
+        
+                Sheets::spreadsheet(env('SPREADSHEET_BCV'))->sheet('BCV')->range('B4:H4')->append($rows);
+                
                 \Log::info(date("Y-m-d H:m:s")." - Scraper - Update values of reference rates BCV - Dolar: ".$iData['dolar']." - Euro: ".$iData['euro']." - Yuan: ".$iData['euro']." - Lira: ".$iData['lira']." - Rublo: ".$iData['rublo']."");
             }else{
                 \Log::info(date("Y-m-d H:m:s")." - Scraper - It is not possible to update values of reference rates BCV");
             }
         }
-
-        \Log::info(date("Y-m-d H:m:s")." - Scraper - Se ejecuto");
-
+        
         return 0;
     }
 }
