@@ -2,6 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admins\Clients\ClientsActivation;
+use App\Models\Admins\Clients\ClientsRecurrence;
+use App\Models\Admins\Clients\RecurrenceStatus;
+use App\Models\Admins\Promotions\Promotions;
+use App\Models\Admins\Promotions\PromotionsActivation;
+use App\Models\Admins\Promotions\PromotionsRecurrence;
+use App\Models\Admins\Promotions\PromotionsTechnology;
 use App\Models\Clients\Donative\DonativeImage;
 use App\Models\Clients\Donative\DonativeRegister;
 use App\Models\Clients\Donative\DonativeVideo;
@@ -53,25 +60,19 @@ class TestController extends Controller
 {
     public static function index(Request $request)
     {
-        
-        $data   =   Scrapers::getLast();
-        $rows = [
-            [$data->dolar, $data->euro, $data->yuan, $data->lira, $data->rublo, $data->paralelo, date_format($data->created_at,"Y-m-d H:i:s")]
-        ];
-
-        Sheets::spreadsheet(env('SPREADSHEET_BCV'))->sheet('BCV')->range('B4:H4')->append($rows);
-        
-        dd(config('google.spreadsheet_id'));
-
-
-        // $process = new Process(['speedtest']);
-
-        // dd($process, $process->run());
-        
-        $user       =   User::find(3);
-        $myWallet   =   $user->getWallet($user->identified);
-        dd($myWallet->balanceFloat);
-
+        $promotions     =   Promotions::get();
+        dd($promotions);
+        $cli    =   Client::find(1);
+        dd(
+            $cli->name, 
+            $cli->promotion->title, 
+            $cli->promotion->technology->name, 
+            $cli->promotion->estate->name, 
+            $cli->promotion->city->name, 
+            $cli->promotion->type->name,
+            $cli->recurrences,
+            $cli->activations
+        );
 
         dd("Test Controller");
     }
@@ -268,6 +269,53 @@ class TestController extends Controller
             ->withExpireDateIn(CarbonInterval::create('P1W'))
             ->create();
         dd($voucher);
+    }
+
+    public static function RecurrenceClient(Request $request)
+    {
+        // $iMonth[0] =    PromotionsRecurrence::select('month')->where('promotion_id', $cli->promotion_id)->orderBy('id', 'DESC')->limit(1)->first()->month;
+        // $iMonth[1] =    PromotionsActivation::select('month')->where('promotion_id', $cli->promotion_id)->orderBy('id', 'DESC')->limit(1)->first()->month;
+
+        // $status =   RecurrenceStatus::where('name', 'LIKE', '%pend%')->first()->id;
+
+        // foreach ($iMonth as $m => $mon) 
+        // {
+        //     $w  =   ($m == 0) ? 1 : 0;
+
+        //     for ($i=$w; $i <= $mon ; $i++) 
+        //     {
+
+        //         if($m == 0)
+        //         {
+        //             $info           =   PromotionsRecurrence::where([['promotion_id', $cli->promotion_id],['month', $i]])->first();
+        //             $new            =   new ClientsRecurrence();
+        //         }else{
+        //             $info           =   PromotionsActivation::where([['promotion_id', $cli->promotion_id],['month', $i]])->first();
+        //             $new            =   new ClientsActivation();
+        //         }
+        //         $new->client_id =   $cli->id;
+    
+        //         if($info)
+        //         {
+        //             $new->month =   $info->month;
+        //             $new->cost  =   $info->cost;
+        //             $new->mult  =   $info->mult;
+        //             $new->iva   =   $info->iva;
+        //             $new->total =   $info->total;
+        //         }else{
+        //             $info       =   $cli->promotion->recurrence[0];
+        //             $new->month =   $i;
+        //             $new->cost  =   $info->cost;
+        //             $new->mult  =   100;
+        //             $new->iva   =   16;
+        //             $new->total =   round(($info->cost*(100/100)+($info->cost*(100/100)*(16/100))), 2);
+        //         }
+        //         $new->month_date    =   Carbon::now()->addMonth($i)->startOfMonth()->toDateString();
+        //         $new->invoice_date  =   "";
+        //         $new->status_id     =   $status;
+        //         $new->save();
+        //     }
+        // }
     }
     
 }

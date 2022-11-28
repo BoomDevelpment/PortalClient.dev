@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admins\DashboardController;
+use App\Http\Controllers\Admins\PromotionsController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Clients\ClientsController;
 use App\Http\Controllers\Clients\CustomersController;
@@ -168,7 +169,14 @@ Route::group(['prefix'  =>  '/customers'], function()
 
 Route::group(['prefix'  =>  '/admins'], function() 
 {
-    Route::get('/',                [DashboardController::class,   'Dashboard'])->name('/');
+    Route::get('/',                 [DashboardController::class,    'Dashboard'])->name('/');
+});
+
+Route::group(['prefix'  =>  '/admins/policy'], function() 
+{
+    Route::get('/',             [PromotionsController::class,       'index'])->name('/');
+    Route::get('/register',     [PromotionsController::class,       'Policy'])->name('/register');
+    Route::post('/register',    [PromotionsController::class,       'Register'])->name('/register');;
 });
 
 /**

@@ -12,4 +12,11 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('src/admin/css/app.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('src/admin/plugins/smartwizard/dist/css/smart_wizard.css') }}">
 
+<link rel="stylesheet" type="text/css" href="{{ asset('src/plugins/sweetalert/css/sweetalert.css') }}">
+
+<link rel="stylesheet" type="text/css" href="{{ asset('src/admin/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('src/admin/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('src/admin/plugins/bootstrap-daterangepicker/daterangepicker.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('src/admin/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css') }}">
+
 <meta name="csrf-token" content="{{ csrf_token() }}" />

@@ -2,6 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Admins\Clients\ClientsActivation;
+use App\Models\Admins\Clients\ClientsRecurrence;
+use App\Models\Admins\Clients\RecurrenceStatus;
+use App\Models\Admins\Promotions\Promotions;
+use App\Models\Admins\Promotions\PromotionsActivation;
+use App\Models\Admins\Promotions\PromotionsRecurrence;
 use App\Models\Clients\Country\City;
 use App\Models\Clients\Country\Estate;
 use App\Models\Clients\Country\Municipality;
@@ -28,6 +34,7 @@ class ClientSeeder extends Seeder
         $estate         =   Estate::where('name', 'like', '%lara%')->first()->id;
         $city           =   City::where('name', 'like', '%barq%')->first()->id;
         $municipality   =   Municipality::where('name', 'like', '%iriba%')->first()->id;
+        $promotion      =   Promotions::first()->id;
 
         $data[0]    =   [
             'mikrowisp'         =>  16,
@@ -37,6 +44,7 @@ class ClientSeeder extends Seeder
             'estate'            =>  $estate,
             'city'              =>  $city,
             'municipality'      =>  $municipality,
+            'promotion'         =>  $promotion,
             'latitude'          =>  strtoupper('00.000000'),
             'longitude'         =>  strtoupper('-00.000000'),
             'phone_principal'   =>  strtoupper('584245387921'),
@@ -63,6 +71,7 @@ class ClientSeeder extends Seeder
             $new->estate_id         =   $da['estate'];
             $new->city_id           =   $da['city'];
             $new->municipality_id   =   $da['municipality'];
+            $new->promotion_id      =   $da['promotion'];
             $new->latitude          =   $da['latitude'];
             $new->longitude         =   $da['longitude'];
             $new->phone_principal   =   $da['phone_principal'];
@@ -80,6 +89,53 @@ class ClientSeeder extends Seeder
 
             try {
                 $new->save();
+
+                $cli        =   Client::find($new->id);
+
+                $iMonth[0]  =   PromotionsRecurrence::select('month')->where('promotion_id', $cli->promotion_id)->orderBy('id', 'DESC')->limit(1)->first()->month;
+                $iMonth[1]  =   PromotionsActivation::select('month')->where('promotion_id', $cli->promotion_id)->orderBy('id', 'DESC')->limit(1)->first()->month;
+
+                $status     =   RecurrenceStatus::where('name', 'LIKE', '%pend%')->first()->id;
+
+                foreach ($iMonth as $m => $mon) 
+                {
+                    $w  =   ($m == 0) ? 1 : 0;
+
+                    for ($i=$w; $i <= $mon ; $i++) 
+                    {
+
+                        if($m == 0)
+                        {
+                            $info           =   PromotionsRecurrence::where([['promotion_id', $cli->promotion_id],['month', $i]])->first();
+                            $new            =   new ClientsRecurrence();
+                        }else{
+                            $info           =   PromotionsActivation::where([['promotion_id', $cli->promotion_id],['month', $i]])->first();
+                            $new            =   new ClientsActivation();
+                        }
+                        $new->client_id =   $cli->id;
+            
+                        if($info)
+                        {
+                            $new->month =   $info->month;
+                            $new->cost  =   $info->cost;
+                            $new->mult  =   $info->mult;
+                            $new->iva   =   $info->iva;
+                            $new->total =   $info->total;
+                        }else{
+                            $info       =   $cli->promotion->recurrence[0];
+                            $new->month =   $i;
+                            $new->cost  =   $info->cost;
+                            $new->mult  =   100;
+                            $new->iva   =   16;
+                            $new->total =   round(($info->cost*(100/100)+($info->cost*(100/100)*(16/100))), 2);
+                        }
+                        $new->month_date    =   Carbon::now()->addMonth($i)->startOfMonth()->toDateString();
+                        $new->invoice_date  =   "";
+                        $new->status_id     =   $status;
+                        $new->save();
+                    }
+                }
+
             } catch (\Exception $e) {
                 var_dump($e->getMessage());
             }

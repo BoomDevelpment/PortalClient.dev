@@ -30,7 +30,6 @@ class Scrapers extends Model
             return true;
 
         } catch (\Exception $e) {
-            // \Log::info($e->getMessage());
             return false;
         }
     }

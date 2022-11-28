@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Admins\Promotions\PromotionsTechnology;
 use App\Models\CLients\Country\Municipios;
 use App\Models\Clients\CustomerServices\CustomerFiel;
 use App\Models\Clients\CustomerServices\CustomerImagen;
@@ -32,6 +33,11 @@ class DatabaseSeeder extends Seeder
         $this->call(CitySeeder::class);
         $this->call(MunicipalitySeeder::class);
 
+        $this->call(PromotionsTypeSeeder::class);
+        $this->call(PromotionsTechnologySeeder::class);
+        $this->call(PromotionsSeeder::class);
+        $this->call(RecurrenceStatusSeeder::class);
+        
         $this->call(ClientSeeder::class);
         $this->call(UserSeeder::class);
         

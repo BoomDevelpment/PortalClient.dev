@@ -2,6 +2,9 @@
 
 namespace App\Models\Clients\Profile;
 
+use App\Models\Admins\Clients\ClientsActivation;
+use App\Models\Admins\Clients\ClientsRecurrence;
+use App\Models\Admins\Promotions\Promotions;
 use App\Models\Clients\Country\City;
 use App\Models\Clients\Country\Estate;
 use App\Models\Clients\Country\Municipality;
@@ -18,16 +21,22 @@ class Client extends Model
 {
     use HasFactory;
 
-    public function status()    {   return $this->belongsTo(Status::class);                 }
-    public function gender()    {   return $this->belongsTo(Gender::class);                 }    
-    public function clientab()  {   return $this->hasOne(AccountBank::class);               }
-    public function clientcc()  {   return $this->hasOne(CreditCard::class);                }
+    public function status()        {   return $this->belongsTo(Status::class);             }
+    public function gender()        {   return $this->belongsTo(Gender::class);             }    
+    public function clientab()      {   return $this->hasOne(AccountBank::class);           }
+    public function clientcc()      {   return $this->hasOne(CreditCard::class);            }
     
-    public function estate()        {   return $this->belongsTo(Estate::class);         }
-    public function city()          {   return $this->belongsTo(City::class);           }
-    public function municipality()  {   return $this->belongsTo(Municipality::class);   }
+    public function estate()        {   return $this->belongsTo(Estate::class);             }
+    public function city()          {   return $this->belongsTo(City::class);               }
+    public function municipality()  {   return $this->belongsTo(Municipality::class);       }
 
-    public function customers() {   return $this->hasMany(CustomerServices::class);     }
+    public function customers()     {   return $this->hasMany(CustomerServices::class);     }
+    public function promotion()     {   return $this->belongsTo(Promotions::class);         }
+    
+    public function recurrences()   {   return $this->hasMany(ClientsRecurrence::class);    }
+    public function activations()   {   return $this->hasMany(ClientsActivation::class);    }    
+
+
 
     public static function GetClient($data)
     {

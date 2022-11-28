@@ -90,25 +90,25 @@ class TransferenceZelleSeeder extends Seeder
 
             $fileName   =   $user->client->client_id.'-'.$identified.'.jpg';
 
-            $img        =   Image::make(public_path('/src/images/supPaypal.png')); 
+            $img        =   Image::make(public_path('\src\images\supPaypal.png')); 
     
             $img->text('$ '.$iData['total'].'', 510, 112.5, function($font) {  
-                $font->size(12);  $font->file(public_path('src/images/fonts/Montserrat-Italic.ttf')); $font->color('#00000');  $font->align('center');  $font->valign('bottom');    
+                $font->size(12);  $font->file(public_path('src\images\fonts\Montserrat-Italic.ttf')); $font->color('#00000');  $font->align('center');  $font->valign('bottom');    
             });
             $img->text($user->name, 300, 170, function($font) {  
-                $font->size(12);  $font->file(public_path('src/images/fonts/Montserrat-Italic.ttf'));$font->color('#00000');  $font->align('center');  $font->valign('bottom');    
+                $font->size(12);  $font->file(public_path('src\images\fonts\Montserrat-Italic.ttf'));$font->color('#00000');  $font->align('center');  $font->valign('bottom');    
             });
             $img->text('test@boomsolutions.com', 300, 195, function($font) {  
-                $font->size(12);  $font->file(public_path('src/images/fonts/Montserrat-Italic.ttf'));$font->color('#00000');  $font->align('center');  $font->valign('bottom');    
+                $font->size(12);  $font->file(public_path('src\images\fonts\Montserrat-Italic.ttf'));$font->color('#00000');  $font->align('center');  $font->valign('bottom');    
             });   
             $img->text('$ '.$iData['total'].'', 250, 257, function($font) {  
-                $font->size(20);  $font->file(public_path('src/images/fonts/Montserrat-Italic.ttf'));$font->color('#00000');  $font->align('center');  $font->valign('bottom');    
+                $font->size(20);  $font->file(public_path('src\images\fonts\Montserrat-Italic.ttf'));$font->color('#00000');  $font->align('center');  $font->valign('bottom');    
             });   
             $img->text('$ 0.00', 230, 307, function($font) {  
-                $font->size(20);  $font->file(public_path('src/images/fonts/Montserrat-Italic.ttf'));$font->color('#00000');  $font->align('center');  $font->valign('bottom');    
+                $font->size(20);  $font->file(public_path('src\images\fonts\Montserrat-Italic.ttf'));$font->color('#00000');  $font->align('center');  $font->valign('bottom');    
             });
             $img->text('$ '.$iData['total'].'', 240, 364, function($font) {  
-                $font->size(20);  $font->file(public_path('src/images/fonts/Montserrat-Italic.ttf'));$font->color('#00000');  $font->align('center');  $font->valign('bottom');    
+                $font->size(20);  $font->file(public_path('src\images\fonts\Montserrat-Italic.ttf'));$font->color('#00000');  $font->align('center');  $font->valign('bottom');    
             });
             $img->save(base_path('public/files/zelle/'.$fileName.''));
 
