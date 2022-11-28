@@ -20,6 +20,7 @@ class CreateScrapersTable extends Migration
             $table->double('yuan', 12,2);
             $table->double('lira', 12,2);
             $table->double('rublo', 12,2);
+            $table->double('paralelo', 12,2);
             $table->integer('status_id')->unsigned()->default(1);
             $table->timestamps();
 
@@ -30,6 +31,8 @@ class CreateScrapersTable extends Migration
             $table->index(['yuan']);
             $table->index(['lira']);
             $table->index(['rublo']);
+            $table->index(['paralelo']);
+            $table->index(['created_at']);
         });
     }
 
