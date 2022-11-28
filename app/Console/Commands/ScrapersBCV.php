@@ -79,14 +79,15 @@ class ScrapersBCV extends Command
             
             $iRes  =   [ 'euro'  =>  $get->euro, 'yuan'  =>  $get->yuan, 'lira'  =>  $get->lira, 'rublo' =>  $get->rublo, 'dolar' =>  $get->dolar];
             
-            $sE     =   ($iRes['euro']  <> $iData['euro'])  ? 1 : 0;
-            $sY     =   ($iRes['lira']  <> $iData['lira'])  ? 1 : 0;
-            $sL     =   ($iRes['yuan']  <> $iData['yuan'])  ? 1 : 0;
-            $sR     =   ($iRes['rublo'] <> $iData['rublo']) ? 1 : 0;
+            // $sE     =   ($iRes['euro']  <> $iData['euro'])  ? 1 : 0;
+            // $sY     =   ($iRes['lira']  <> $iData['lira'])  ? 1 : 0;
+            // $sL     =   ($iRes['yuan']  <> $iData['yuan'])  ? 1 : 0;
+            // $sR     =   ($iRes['rublo'] <> $iData['rublo']) ? 1 : 0;
             $sD     =   ($iRes['dolar'] <> $iData['dolar']) ? 1 : 0;
         }
 
-        if( ($sE == 1) || ($sY == 1) || ($sL == 1) || ($sR == 1) || ($sD == 1) )
+        // if( ($sE == 1) || ($sY == 1) || ($sL == 1) || ($sR == 1) || ($sD == 1) )
+        if( $sD == 1 )
         {
             $insert     =   Scrapers::insertData($iData);
             

@@ -9,25 +9,8 @@ class DashboardController extends Controller
 {
     public function Dashboard(Request $request)
     {
-        dd("Admins Dashboard");
-        // try {
-        //     $cli    =   Client::GetClient(['field'=>'id', 'id' => auth()->user()->client->client_id]);
-        // } catch (\Exception $e) {
-        //     return redirect('/404');
-        // }
-        
-        // $user       =   User::find(auth()->user()->id);
-        // $cli        =   Client::GetClient(['field'=>'id', 'id' => auth()->user()->client->client_id]);
-        // $myWallet   =   $user->getWallet(auth()->user()->identified);
-
-        
-        // $videos     =   DonativeVideo::where('status_id', '=', Status::where('name', 'like', '%act%')->first()->id)->first();
-        // $iVid       =   ($videos != null) ? $videos : ['status_id' => 0, 'name' => '', 'src' => ''];
-
-        // return view('pages/clients/dashboard/index',[
-        //     'wallet'    =>  $myWallet->balanceFloat,
-        //     'cli'       =>  $cli,
-        //     'video'     =>  $iVid
-        // ]);
+        // dd("Admins Dashboard");
+        return view('page/admins/test/index',[
+        ]);
     }
 }
